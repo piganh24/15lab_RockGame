@@ -4,9 +4,9 @@ def sum_numbers_while(n):
     
     total = 0
     i = 0
-    while i <= n:
+    for i in range(n + 1):
         total += i
-        i += 1
+        
 
     return total
 
