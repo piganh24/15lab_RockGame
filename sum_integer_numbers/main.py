@@ -1,30 +1,56 @@
-def sum_numbers_for(n):
-    """
-    Обчислює суму чисел від 0 до n.
+import random
 
-    >>> sum_numbers_for(5)
-    15
-    >>> sum_numbers_for(0)
-    0
-    >>> sum_numbers_for(-3)
-    0
-    >>> sum_numbers_for("abc")
-    'Помилка: введене значення не є числом!'
-    """
-    try:
-        n = int(n)
-        if n <= 0:
-            return 0
-        return sum(i for i in range(n + 1))
-    except ValueError:
-        return "Помилка: введене значення не є числом!"
+ACTIONS = {0: "Rock", 1: "Paper", 2: "Scissors"}
+VICTORIES = {
+    "Rock": "Scissors",  # Rock beats scissors
+    "Paper": "Rock",  # Paper beats rock
+    "Scissors": "Paper",  # Scissors beats paper
+}
+
+
+# Here choosing rock,paper or scissors
+def get_user_selection(actions):
+    choices = [f"{actions[action]}[{action}]" for action in actions]
+    choices_str = ", ".join(choices)
+    selection = int(input(f"Enter a choice ({choices_str}): "))
+    action = actions[selection]
+    return action
+
+
+# Random choose
+def get_computer_selection(actions):
+    selection = random.randint(0, len(actions) - 1)
+    action = actions[selection]
+    return action
+
+
+# Results
+def get_determine_winner(victories, user_action, computer_action):
+    defeats = victories[user_action]
+    if user_action == computer_action:
+        result = f"Both players selected {user_action}. It's a tie!"
+    elif computer_action in defeats:
+        result = f"{user_action} beats {computer_action}! You win!"
+    else:
+        result = f"{computer_action} beats {user_action}! You lose."
+    return result
+
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-
-    try:
-        num = int(input("Введіть додатне ціле число: "))
-        print(f"Сума чисел від 0 до {num} дорівнює {sum_numbers_for(num)}")
-    except ValueError:
-        print("Помилка: введене значення не є числом!")
+    while True:
+        try:
+            user_selection = get_user_selection(ACTIONS)
+            print(user_selection)
+            computer_selection = get_computer_selection(ACTIONS)
+            print(computer_selection)
+            determine_winner = get_determine_winner(
+                VICTORIES, user_selection, computer_selection
+            )
+            print(determine_winner)
+        except:
+            range_str = f"[0, {len(ACTIONS) - 1}]"
+            print(f"Invalid selection. Enter a value in range {range_str}")
+            continue
+        play_again = input("Play again? (y/n): ")
+        if play_again.lower() != "y":
+            break
